@@ -4,8 +4,12 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,8 +23,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.JToolTip;
 import javax.swing.border.BevelBorder;
+
+import PortScanner.ScanResult;
 
 public class OutlinePing extends JFrame {
 
@@ -259,11 +264,29 @@ public class OutlinePing extends JFrame {
 					stats[i][2] = msg[2];
 					stats[i][3] = msg[3];
 				}
+				
+				
 				jTable.repaint();
 			}
 		});
 	}
 
+	public static Future<ScanResult> portIsOpen(final ExecutorService es, final String ip, final int port, final int timeout)
+	{
+		return es.submit(new Callable<ScanResult>() {
+			public ScanResult call()
+			{
+				try {
+					Socket socket = new Socket();
+					socket.connect(new InetSocketAddress(ip, port), timeout);
+					socket.close();
+					return new ScanResult(port, true);
+				} catch (Exception ex) {
+					return new ScanResult(port, false);
+				}
+			}
+		});
+	}
 	public Object[][] initializeTableData() {
 		Object[][] results = new Object[254][5];
 		return results;
