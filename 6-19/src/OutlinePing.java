@@ -25,8 +25,6 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.border.BevelBorder;
 
-import PortScanner.ScanResult;
-
 public class OutlinePing extends JFrame {
 
 	public OutlinePing() {
@@ -263,8 +261,12 @@ public class OutlinePing extends JFrame {
 					stats[i][1] = msg[1];
 					stats[i][2] = msg[2];
 					stats[i][3] = msg[3];
+					
+					/* if(msg[0]!=null|msg[1]!=null|msg[2]!=null|msg[3]!=null)
+					{
+						
+					} */
 				}
-				
 				
 				jTable.repaint();
 			}
