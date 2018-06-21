@@ -179,6 +179,7 @@ public class OutlinePing extends JFrame {
 		JTextField tfRangeStart = new JTextField(10);
 		JLabel IbRangend = new JLabel("to ");
 		JTextField tfRangend = new JTextField(10);
+		JComboBox combobox = new JComboBox();
 
 		IbRangend.setFont(myFont);
 		tfRangend.setPreferredSize(new Dimension(90, 30));
@@ -191,6 +192,7 @@ public class OutlinePing extends JFrame {
 		JComboBox cbOption = new JComboBox();
 		cbOption.addItem("/24");
 		cbOption.addItem("/26");
+		combobox.addItem("IP Range");
 		JButton btStart = new JButton("Start ");
 
 		lbHostname.setFont(myFont);
@@ -198,11 +200,13 @@ public class OutlinePing extends JFrame {
 		btup.setPreferredSize(new Dimension(90, 30));
 		cbOption.setPreferredSize(new Dimension(90, 30));
 		btStart.setPreferredSize(new Dimension(90, 30));
+		combobox.setPreferredSize(new Dimension(90, 30));
 
 		toolbar1.add(IbRangStart);
 		toolbar1.add(tfRangeStart);
 		toolbar1.add(IbRangend);
 		toolbar1.add(tfRangend);
+		toolbar1.add(combobox);
 
 		toolbar2.add(lbHostname);
 		toolbar2.add(tfHostname);
@@ -263,10 +267,6 @@ public class OutlinePing extends JFrame {
 					stats[i][3] = msg[3];
 					stats[i][4] = msg[4];
 					
-					/* if(msg[0]!=null|msg[1]!=null|msg[2]!=null|msg[3]!=null)
-					{
-						
-					} */
 				}
 				
 				jTable.repaint();
