@@ -261,6 +261,7 @@ public class OutlinePing extends JFrame {
 					stats[i][1] = msg[1];
 					stats[i][2] = msg[2];
 					stats[i][3] = msg[3];
+					stats[i][4] = msg[4];
 					
 					/* if(msg[0]!=null|msg[1]!=null|msg[2]!=null|msg[3]!=null)
 					{
@@ -273,22 +274,7 @@ public class OutlinePing extends JFrame {
 		});
 	}
 
-	public static Future<ScanResult> portIsOpen(final ExecutorService es, final String ip, final int port, final int timeout)
-	{
-		return es.submit(new Callable<ScanResult>() {
-			public ScanResult call()
-			{
-				try {
-					Socket socket = new Socket();
-					socket.connect(new InetSocketAddress(ip, port), timeout);
-					socket.close();
-					return new ScanResult(port, true);
-				} catch (Exception ex) {
-					return new ScanResult(port, false);
-				}
-			}
-		});
-	}
+	
 	public Object[][] initializeTableData() {
 		Object[][] results = new Object[254][5];
 		return results;

@@ -1,4 +1,4 @@
-public static class ScanResult {
+public class ScanResult {
 	private int port;
 	
 	private boolean isOpen;

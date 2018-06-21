@@ -2,6 +2,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class Pinging extends Thread {
 	private Object[] msg;
@@ -9,7 +19,7 @@ public class Pinging extends Thread {
 
 	public Pinging(String ip) {
 		this.ip = ip;
-		msg = new Object[4];
+		msg = new Object[5];
 	}
 
 	public void run() {
@@ -34,20 +44,57 @@ public class Pinging extends Thread {
 					// System.out.println(matcher.group(1));
 					msg[1] = line.substring(line.indexOf("ms") - 1, line.indexOf("ms") + 2);
 					msg[2] = line.substring(line.indexOf("TTL=") + 4, line.length());
+
+					final ExecutorService es = Executors.newFixedThreadPool(20);
+					final String ip = "127.0.0.1";
+					final int timeout = 200;
+					final List<Future<ScanResult>> futures = new ArrayList<>();
+					// 65535, 1024
+					for (int port = 1; port <= 1024; port++) {
+						// for (int port = 1; port <= 80; port++) {
+						futures.add(portIsOpen(es, ip, port, timeout));
+					}
+					try {
+						es.awaitTermination(200L, TimeUnit.MILLISECONDS);
+						int openPorts = 0;
+						for (final Future<ScanResult> f : futures) {
+							if (f.get().isOpen()) {
+								openPorts++;
+								msg[4] = f.get().getPort();
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					break;
 				}
-				if (line != null)
-
-				{
-				}
+			}
+			if (line != null) {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
 
-	}// if
-	
+	// if
+
+	public static Future<ScanResult> portIsOpen(final ExecutorService es, final String ip, final int port,
+			final int timeout) {
+		return es.submit(new Callable<ScanResult>() {
+			public ScanResult call() {
+				try {
+					Socket socket = new Socket();
+					socket.connect(new InetSocketAddress(ip, port), timeout);
+					socket.close();
+					return new ScanResult(port, true);
+				} catch (Exception ex) {
+					return new ScanResult(port, false);
+				}
+			}
+		});
+	}
+
 	public Object[] getMsg() {
 		try {
 			join();
@@ -55,13 +102,11 @@ public class Pinging extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return msg;
 	}
-	
+
 	public static void main(String[] args) {
-		
-		
-		
+
 	}
 }
