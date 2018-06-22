@@ -5,11 +5,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -161,7 +156,7 @@ public class OutlinePing extends JFrame {
 		// statusbar end
 
 		// table begin
-		String titles[] = new String[] { "IP", "Ping", "TTL", "Hostname", "Ports[0+]" };
+		String titles[] = new String[] { "IP", "Ping", "TTL", "Hostname", "Ports[4+]" };
 		Object[][] stats = initializeTableData();
 		JTable jTable = new JTable(stats, titles);
 
@@ -197,7 +192,7 @@ public class OutlinePing extends JFrame {
 
 		lbHostname.setFont(myFont);
 		tfHostname.setPreferredSize(new Dimension(90, 30));
-		btup.setPreferredSize(new Dimension(90, 30));
+		btup.setPreferredSize(new Dimension(30, 30));
 		cbOption.setPreferredSize(new Dimension(90, 30));
 		btStart.setPreferredSize(new Dimension(90, 30));
 		combobox.setPreferredSize(new Dimension(90, 30));
